@@ -5,15 +5,16 @@ const initialState = {
   filters: {
     stops: {
       all: true,
-      nonStop: false,
-      oneStop: false,
-      twoStops: false,
-      threeStops: false,
+      nonStop: true,
+      oneStop: true,
+      twoStops: true,
+      threeStops: true,
     },
   },
   sorting: {
     byPrice: false,
     byDuration: false,
+    byOptimal: false
   },
 };
 
@@ -39,13 +40,13 @@ const ticketsReducer = (state = initialState, action) => {
           },
         },
       };
-
     case 'TOGGLE_SORT':
       return {
         ...state,
         sorting: {
-          ...state.sorting,
-          [action.payload]: !state.sorting[action.payload],
+          byPrice: action.payload === 'byPrice' ? !state.sorting.byPrice : false,
+          byDuration: action.payload === 'byDuration' ? !state.sorting.byDuration : false,
+          byOptimal: action.payload === 'byOptimal' ? !state.sorting.byOptimal : false,
         },
       };
 

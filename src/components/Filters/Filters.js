@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import styles from './Filters.module.scss';
 
-const InputCheckbox = ({ value, text }) => {
+const FiltersCheckbox = ({ value, text }) => {
   const dispatch = useDispatch();
   const stopsFilters = useSelector((state) => state.tickets.filters.stops);
 
@@ -14,7 +15,11 @@ const InputCheckbox = ({ value, text }) => {
         return acc;
       }, {});
     } else {
-      newFilters = { ...stopsFilters, [filter]: !stopsFilters[filter] };
+      if (stopsFilters.all) {
+        newFilters = { ...stopsFilters, all: false, [filter]: !stopsFilters[filter] };
+      } else {
+        newFilters = { ...stopsFilters, [filter]: !stopsFilters[filter] };
+      }
     }
 
     dispatch({
@@ -22,28 +27,29 @@ const InputCheckbox = ({ value, text }) => {
       payload: { category: 'stops', filters: newFilters },
     });
   };
-
   return (
-    <label>
+    <label className={styles.label}>
       <input
+        className={styles.input}
         type="checkbox"
         value={value}
         checked={stopsFilters[value]}
         onChange={() => handleFilterChange(value)}
       />
-      {text}
+      <span className={styles.text}>{text}</span>
     </label>
   );
 };
 
 const Filters = () => {
   return (
-    <div>
-      <InputCheckbox value="all" text="Все" />
-      <InputCheckbox value="nonStop" text="без пересадок" />
-      <InputCheckbox value="oneStop" text="1 Пересадка" />
-      <InputCheckbox value="twoStops" text="2 Пересадки" />
-      <InputCheckbox value="threeStops" text="3 Пересадки" />
+    <div className={styles.filters}>
+      <span className={styles.spanLabel}>КОЛИЧЕСТВО ПЕРЕСАДОК</span>
+      <FiltersCheckbox value="all" text="Все" />
+      <FiltersCheckbox value="nonStop" text="Без пересадок" />
+      <FiltersCheckbox value="oneStop" text="1 Пересадка" />
+      <FiltersCheckbox value="twoStops" text="2 Пересадки" />
+      <FiltersCheckbox value="threeStops" text="3 Пересадки" />
     </div>
   );
 };

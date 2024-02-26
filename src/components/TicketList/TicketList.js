@@ -4,12 +4,12 @@ import styles from './TicketList.module.scss';
 
 const SegmentInfo = ({ label, text }) => (
   <div className={styles.data}>
-    <p className={styles.ticket__segmentInfo__text}>
+    <div className={styles.ticket__segmentInfo__label}>
       {label}
-    </p>
-    <p className={styles.ticket__segmentInfo__text}>
+    </div>
+    <div className={styles.ticket__segmentInfo__text}>
       {text}
-    </p>
+    </div>
   </div>
 );
 
@@ -30,7 +30,7 @@ const TicketSegment = ({ segment }) => {
       <SegmentInfo label={`${segment.origin} - ${segment.destination}`} text={`${departureTime} - ${arrivalTime}`} />
       <SegmentInfo label="В пути" text={`${Math.floor(segment.duration / 60)}ч ${segment.duration % 60}мин`} />
       <SegmentInfo
-        label={segment.stops.length === 0 ? 'Без пересадок' : `${segment.stops.length} пересадки`}
+        label={segment.stops.length === 0 ? 'Без пересадок' : `${segment.stops.length} пересадк${segment.stops.length === 1 ? 'a' : 'и'}`}
         text={segment.stops.join(', ')}
       />
     </div>
@@ -40,7 +40,7 @@ const TicketSegment = ({ segment }) => {
 const Ticket = ({ ticket }) => (
   <div className={styles.ticket}>
     <div className={styles.ticket__header}>
-      <p className={styles.ticket__price}>{ticket.price} ₽</p>
+      <div className={styles.ticket__price}>{parseInt(ticket.price, 10).toLocaleString('ru-RU')} Р</div>
       <img
         className={styles.ticket__logo}
         src={`https://pics.avs.io/99/36/${ticket.carrier}.png`}
@@ -58,6 +58,7 @@ const Ticket = ({ ticket }) => (
 const TicketList = () => {
   const tickets = useSelector((state) => state.tickets.tickets);
   const filters = useSelector((state) => state.tickets.filters.stops);
+  const sorting = useSelector((state) => state.tickets.sorting);
   const [displayedTicketCount, setDisplayedTicketCount] = useState(5);
 
   const filteredTickets = tickets.filter((ticket) => {
@@ -68,7 +69,27 @@ const TicketList = () => {
     if (filters.threeStops && ticket.segments.every((segment) => segment.stops.length === 3)) return true;
     return false;
   });
+  if (tickets.length === 0) {
+    return <div className={styles.errorMessage}>Нет доступных билетов по вашему запросу</div>;
+  }
+  const sortedTickets = filteredTickets.slice(0, displayedTicketCount).sort((a, b) => {
+    if (sorting.byPrice) {
+      return a.price - b.price;
+    }
+    if (sorting.byDuration) {
+      return a.segments.reduce((acc, seg) => acc + seg.duration, 0) - b.segments.reduce((acc, seg) => acc + seg.duration, 0);
+    }
+    if (sorting.byOptimal) {
+      const weightPrice = 0.7;
+      const weightDuration = 0.3;
 
+      const weightA = a.price * weightPrice + a.segments.reduce((acc, seg) => acc + seg.duration, 0) * weightDuration;
+      const weightB = b.price * weightPrice + b.segments.reduce((acc, seg) => acc + seg.duration, 0) * weightDuration;
+
+      return weightA - weightB;
+    }
+    return 0;
+  });
   const displayedTickets = filteredTickets.slice(0, displayedTicketCount);
 
   const handleClick = () => {
@@ -76,16 +97,15 @@ const TicketList = () => {
   };
   return (
     <div className={styles.ticketListContainer}>
-      {displayedTickets.map((ticket, index) => (
-        <Ticket key={index} ticket={ticket} />
+      {sortedTickets.map((ticket) => (
+        <Ticket key={ticket.id} ticket={ticket} />
       ))}
-      {filteredTickets.length && (
-      <button onClick={handleClick}>
-        Показать еще 5 билетов
-      </button>
-      
-    )}
-    </div>
+      {displayedTickets.length && (
+        <button className={styles.button} onClick={handleClick}>
+          Показать еще 5 билетов
+        </button>
+      )}
+    </div>  
   );
 };
 

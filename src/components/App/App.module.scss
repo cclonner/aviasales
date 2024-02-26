@@ -1,8 +1,66 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
 :global {
-  body {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 12px;
+  html {
+    -webkit-text-size-adjust: 100%;
+    line-height: 1.15;
   }
+  #Avisales{
+    color: #4a4a4a;
+    font-family: "Open Sans", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    min-width: 520px;
+    text-transform: uppercase;
+  }
+  body {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    gap: 20px;
+
+  }
+  
+}
+.menu{
+  align-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 20px;
+  width: 500px;
+}
+.app{
+  align-content: flex-start;
+    align-items: flex-start;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+.logo{
+  height: 92px;
+  position: relative;
+  width: 82px;
+
+}
+.logo__plane{
+  height: 97px;
+  width: auto;
+  }
+.body_app{
+  align-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 20px;
+  justify-content: flex-start;
+  padding-bottom: 20px;
 }

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setTickets, setError } from '../../actions/ticketActions';
 import { getSearchId, getTickets } from '../../services/api';
 import TicketList from '../TicketList/TicketList';
 import Filters from '../Filters/Filters';
-
-import classes from './App.module.scss'
+import logo from '../../assets/Logo.svg';
+import styles from './App.module.scss'
+import SortButtons from '../SortButton';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -29,10 +29,17 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <div className={classes.body }>
-      {error && <p>Error: {error}</p>}
-      <Filters />
-      <TicketList />
+    <div id='Avisales' className={styles.body_app}>
+      <div className={styles.logo}>
+        <img src={logo} alt='Logo' className={styles.logo__plane}/>
+      </div>
+      <div className={styles.app}>
+          <Filters />
+          <div className={styles.menu}>
+            <SortButtons/>
+            <TicketList />
+          </div>
+      </div>
     </div>
   );
 };
