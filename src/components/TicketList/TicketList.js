@@ -89,7 +89,7 @@ function TicketList() {
     return false
   })
   if (tickets.length === 0) {
-    return <div className={styles.errorMessage}>Нет доступных билетов по вашему запросу</div>
+    return <div className={styles.errorMessage}>Рейсов, подходящих под заданные фильтры, не найдено</div>
   }
   const sortedTickets = filteredTickets.slice(0, displayedTicketCount).sort((a, b) => {
     if (sorting.byPrice) {
