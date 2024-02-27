@@ -1,3 +1,3 @@
-import SortButtons from "./SortButtons";
+import SortButtons from './SortButtons'
 
-export default SortButtons;
+export default SortButtons

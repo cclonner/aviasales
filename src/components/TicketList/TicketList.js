@@ -1,100 +1,108 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import styles from './TicketList.module.scss';
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
 
-const SegmentInfo = ({ label, text }) => (
-  <div className={styles.data}>
-    <div className={styles.ticket__segmentInfo__label}>
-      {label}
-    </div>
-    <div className={styles.ticket__segmentInfo__text}>
-      {text}
-    </div>
-  </div>
-);
+import styles from './TicketList.module.scss'
 
-const TicketSegment = ({ segment }) => {
+function SegmentInfo({ label, text }) {
+  return (
+    <div className={styles.data}>
+      <div className={styles.ticket__segmentInfo__label}>{label}</div>
+      <div className={styles.ticket__segmentInfo__text}>{text}</div>
+    </div>
+  )
+}
+
+function TicketSegment({ segment }) {
   const departureTime = new Date(segment.date).toLocaleTimeString('ru-RU', {
     hour: 'numeric',
     minute: 'numeric',
-  });
-  const arrivalTime = new Date(
-    new Date(segment.date).getTime() + segment.duration * 60000
-  ).toLocaleTimeString('ru-RU', {
-    hour: 'numeric',
-    minute: 'numeric',
-  });
+  })
+  const arrivalTime = new Date(new Date(segment.date).getTime() + segment.duration * 60000).toLocaleTimeString(
+    'ru-RU',
+    {
+      hour: 'numeric',
+      minute: 'numeric',
+    }
+  )
 
   return (
     <div className={styles.segment}>
       <SegmentInfo label={`${segment.origin} - ${segment.destination}`} text={`${departureTime} - ${arrivalTime}`} />
       <SegmentInfo label="В пути" text={`${Math.floor(segment.duration / 60)}ч ${segment.duration % 60}мин`} />
       <SegmentInfo
-        label={segment.stops.length === 0 ? 'Без пересадок' : `${segment.stops.length} пересадк${segment.stops.length === 1 ? 'a' : 'и'}`}
+        label={
+          segment.stops.length === 0
+            ? 'Без пересадок'
+            : `${segment.stops.length} пересадк${segment.stops.length === 1 ? 'a' : 'и'}`
+        }
         text={segment.stops.join(', ')}
       />
     </div>
-  );
-};
+  )
+}
 
-const Ticket = ({ ticket }) => (
-  <div className={styles.ticket}>
-    <div className={styles.ticket__header}>
-      <div className={styles.ticket__price}>{parseInt(ticket.price, 10).toLocaleString('ru-RU')} Р</div>
-      <img
-        className={styles.ticket__logo}
-        src={`https://pics.avs.io/99/36/${ticket.carrier}.png`}
-        alt={ticket.carrier}
-      />
+function Ticket({ ticket }) {
+  return (
+    <div className={styles.ticket}>
+      <div className={styles.ticket__header}>
+        <div className={styles.ticket__price}>{parseInt(ticket.price, 10).toLocaleString('ru-RU')} Р</div>
+        <img
+          className={styles.ticket__logo}
+          src={`https://pics.avs.io/99/36/${ticket.carrier}.png`}
+          alt={ticket.carrier}
+        />
+      </div>
+      <div className={styles.ticket__info}>
+        {ticket.segments.map((segment) => (
+          <TicketSegment key={segment.id} segment={segment} />
+        ))}
+      </div>
     </div>
-    <div className={styles.ticket__info}>
-      {ticket.segments.map((segment, segmentIndex) => (
-        <TicketSegment key={segmentIndex} segment={segment} />
-      ))}
-    </div>
-  </div>
-);
+  )
+}
 
-const TicketList = () => {
-  const tickets = useSelector((state) => state.tickets.tickets);
-  const filters = useSelector((state) => state.tickets.filters.stops);
-  const sorting = useSelector((state) => state.tickets.sorting);
-  const [displayedTicketCount, setDisplayedTicketCount] = useState(5);
+function TicketList() {
+  const tickets = useSelector((state) => state.tickets.tickets)
+  const filters = useSelector((state) => state.tickets.filters.stops)
+  const sorting = useSelector((state) => state.tickets.sorting)
+  const [displayedTicketCount, setDisplayedTicketCount] = useState(5)
 
   const filteredTickets = tickets.filter((ticket) => {
-    if (filters.all) return true;
-    if (filters.nonStop && ticket.segments.every((segment) => segment.stops.length === 0)) return true;
-    if (filters.oneStop && ticket.segments.every((segment) => segment.stops.length === 1)) return true;
-    if (filters.twoStops && ticket.segments.every((segment) => segment.stops.length === 2)) return true;
-    if (filters.threeStops && ticket.segments.every((segment) => segment.stops.length === 3)) return true;
-    return false;
-  });
+    if (filters.all) return true
+    if (filters.nonStop && ticket.segments.every((segment) => segment.stops.length === 0)) return true
+    if (filters.oneStop && ticket.segments.every((segment) => segment.stops.length === 1)) return true
+    if (filters.twoStops && ticket.segments.every((segment) => segment.stops.length === 2)) return true
+    if (filters.threeStops && ticket.segments.every((segment) => segment.stops.length === 3)) return true
+    return false
+  })
   if (tickets.length === 0) {
-    return <div className={styles.errorMessage}>Нет доступных билетов по вашему запросу</div>;
+    return <div className={styles.errorMessage}>Нет доступных билетов по вашему запросу</div>
   }
   const sortedTickets = filteredTickets.slice(0, displayedTicketCount).sort((a, b) => {
     if (sorting.byPrice) {
-      return a.price - b.price;
+      return a.price - b.price
     }
     if (sorting.byDuration) {
-      return a.segments.reduce((acc, seg) => acc + seg.duration, 0) - b.segments.reduce((acc, seg) => acc + seg.duration, 0);
+      return (
+        a.segments.reduce((acc, seg) => acc + seg.duration, 0) - b.segments.reduce((acc, seg) => acc + seg.duration, 0)
+      )
     }
     if (sorting.byOptimal) {
-      const weightPrice = 0.7;
-      const weightDuration = 0.3;
+      const weightPrice = 0.7
+      const weightDuration = 0.3
 
-      const weightA = a.price * weightPrice + a.segments.reduce((acc, seg) => acc + seg.duration, 0) * weightDuration;
-      const weightB = b.price * weightPrice + b.segments.reduce((acc, seg) => acc + seg.duration, 0) * weightDuration;
+      const weightA = a.price * weightPrice + a.segments.reduce((acc, seg) => acc + seg.duration, 0) * weightDuration
+      const weightB = b.price * weightPrice + b.segments.reduce((acc, seg) => acc + seg.duration, 0) * weightDuration
 
-      return weightA - weightB;
+      return weightA - weightB
     }
-    return 0;
-  });
-  const displayedTickets = filteredTickets.slice(0, displayedTicketCount);
+    return 0
+  })
+  const displayedTickets = filteredTickets.slice(0, displayedTicketCount)
 
   const handleClick = () => {
-    setDisplayedTicketCount(displayedTicketCount + 5);
-  };
+    setDisplayedTicketCount(displayedTicketCount + 5)
+  }
   return (
     <div className={styles.ticketListContainer}>
       {sortedTickets.map((ticket) => (
@@ -105,8 +113,8 @@ const TicketList = () => {
           Показать еще 5 билетов
         </button>
       )}
-    </div>  
-  );
-};
+    </div>
+  )
+}
 
-export default TicketList;
+export default TicketList

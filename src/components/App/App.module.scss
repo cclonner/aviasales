@@ -5,12 +5,12 @@
     -webkit-text-size-adjust: 100%;
     line-height: 1.15;
   }
-  #Avisales{
+  #Avisales {
     color: #4a4a4a;
-    font-family: "Open Sans", sans-serif;
+    font-family: 'Open Sans', sans-serif;
     font-size: 12px;
     font-weight: 600;
-    letter-spacing: .5px;
+    letter-spacing: 0.5px;
     min-width: 520px;
     text-transform: uppercase;
   }
@@ -22,11 +22,9 @@
     align-content: center;
     align-items: center;
     gap: 20px;
-
   }
-  
 }
-.menu{
+.menu {
   align-content: center;
   align-items: center;
   display: flex;
@@ -35,26 +33,25 @@
   gap: 20px;
   width: 500px;
 }
-.app{
+.app {
   align-content: flex-start;
-    align-items: flex-start;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
+  align-items: flex-start;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
 }
-.logo{
+.logo {
   height: 92px;
   position: relative;
   width: 82px;
-
 }
-.logo__plane{
+.logo__plane {
   height: 97px;
   width: auto;
-  }
-.body_app{
+}
+.body_app {
   align-content: center;
   align-items: center;
   display: flex;

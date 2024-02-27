@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable default-param-last */
 const initialState = {
   tickets: [],
   loading: false,
@@ -14,20 +16,20 @@ const initialState = {
   sorting: {
     byPrice: false,
     byDuration: false,
-    byOptimal: false
+    byOptimal: false,
   },
-};
+}
 
 const ticketsReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'FETCH_TICKETS_START':
-      return { ...state, loading: true, error: null };
+      return { ...state, loading: true, error: null }
 
     case 'FETCH_TICKETS_SUCCESS':
-      return { ...state, loading: false, tickets: action.payload };
+      return { ...state, loading: false, tickets: action.payload }
 
     case 'FETCH_TICKETS_FAILURE':
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload }
 
     case 'TOGGLE_FILTER':
       return {
@@ -39,7 +41,7 @@ const ticketsReducer = (state = initialState, action) => {
             ...action.payload.filters,
           },
         },
-      };
+      }
     case 'TOGGLE_SORT':
       return {
         ...state,
@@ -48,11 +50,11 @@ const ticketsReducer = (state = initialState, action) => {
           byDuration: action.payload === 'byDuration' ? !state.sorting.byDuration : false,
           byOptimal: action.payload === 'byOptimal' ? !state.sorting.byOptimal : false,
         },
-      };
+      }
 
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default ticketsReducer;
+export default ticketsReducer

@@ -1,88 +1,86 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 20px;
+      }
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 0;
-      padding: 20px;
-    }
+      .ticket {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 20px;
+        max-width: 600px;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+      }
 
-    .ticket {
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      padding: 20px;
-      max-width: 600px;
-      height: auto;
-      display: flex;
-      flex-direction: column;
-    }
+      .ticket__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-    .ticket__header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+      .ticket__logo {
+        width: 50px;
+        height: 50px;
+      }
 
-    .ticket__logo {
-      width: 50px;
-      height: 50px;
-    }
+      .ticket__info {
+        margin-bottom: 10px;
+      }
 
-    .ticket__info {
-      margin-bottom: 10px;
-    }
+      .segment {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
 
-    .segment {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
+      .data {
+        flex: 1;
+        margin: 0 10px;
+      }
+    </style>
+  </head>
 
-    .data {
-      flex: 1;
-      margin: 0 10px;
-    }
-  </style>
-</head>
-
-<body>
-  <div class="ticket">
-    <div class="ticket__header">
-      <p class="ticket__price">60000 ₽</p>
-      <img class="ticket__logo" src="airline-logo.png" alt="Airline Logo">
-    </div>
-    <div class="ticket__info">
-      <div class="segment">
-        <div class="data">
-          <p>HNK-MOW</p>
-          <p>12:00-21:00</p>
+  <body>
+    <div class="ticket">
+      <div class="ticket__header">
+        <p class="ticket__price">60000 ₽</p>
+        <img class="ticket__logo" src="airline-logo.png" alt="Airline Logo" />
+      </div>
+      <div class="ticket__info">
+        <div class="segment">
+          <div class="data">
+            <p>HNK-MOW</p>
+            <p>12:00-21:00</p>
+          </div>
+          <div class="data">
+            <p>Время в пути: 9ч</p>
+          </div>
+          <div class="data">
+            <p>количество пересадок:0</p>
+          </div>
         </div>
-        <div class="data">
-          <p>Время в пути: 9ч</p>
-        </div>
-        <div class="data">
-          <p>количество пересадок:0</p>
+        <div class="segment">
+          <div class="data">
+            <p>HNK-MOW</p>
+            <p>12:00-21:00</p>
+          </div>
+          <div class="data">
+            <p>Время в пути: 9ч</p>
+          </div>
+          <div class="data">
+            <p>количество пересадок:0</p>
+          </div>
         </div>
       </div>
-      <div class="segment">
-        <div class="data">
-          <p>HNK-MOW</p>
-          <p>12:00-21:00</p>
-        </div>
-        <div class="data">
-          <p>Время в пути: 9ч</p>
-        </div>
-        <div class="data">
-          <p>количество пересадок:0</p>
-        </div>
-      </div>
     </div>
-  </div>
-</body>
-
+  </body>
 </html>

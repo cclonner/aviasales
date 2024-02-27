@@ -1,7 +1,7 @@
 .sortButtonsContainer {
   display: flex;
   align-items: center;
-  border: 1px solid #2196F3;
+  border: 1px solid #2196f3;
   border-radius: 5px;
   display: flex;
   flex-direction: row;
@@ -20,6 +20,6 @@
 }
 
 .sortButton.active {
-  background-color: #2196F3;
+  background-color: #2196f3;
   color: #ffffff;
 }

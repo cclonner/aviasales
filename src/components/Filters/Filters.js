@@ -1,32 +1,34 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import styles from './Filters.module.scss';
+import { useDispatch, useSelector } from 'react-redux'
 
-const FiltersCheckbox = ({ value, text }) => {
-  const dispatch = useDispatch();
-  const stopsFilters = useSelector((state) => state.tickets.filters.stops);
+import styles from './Filters.module.scss'
+
+function FiltersCheckbox({ value, text }) {
+  const dispatch = useDispatch()
+  const stopsFilters = useSelector((state) => state.tickets.filters.stops)
 
   const handleFilterChange = (filter) => {
-    let newFilters;
+    let newFilters
 
     if (filter === 'all') {
       newFilters = Object.keys(stopsFilters).reduce((acc, key) => {
-        acc[key] = !stopsFilters[filter];
-        return acc;
-      }, {});
-    } else {
-      if (stopsFilters.all) {
-        newFilters = { ...stopsFilters, all: false, [filter]: !stopsFilters[filter] };
-      } else {
-        newFilters = { ...stopsFilters, [filter]: !stopsFilters[filter] };
+        acc[key] = !stopsFilters[filter]
+        return acc
+      }, {})
+    } else if (stopsFilters.all) {
+      newFilters = {
+        ...stopsFilters,
+        all: false,
+        [filter]: !stopsFilters[filter],
       }
+    } else {
+      newFilters = { ...stopsFilters, [filter]: !stopsFilters[filter] }
     }
 
     dispatch({
       type: 'TOGGLE_FILTER',
       payload: { category: 'stops', filters: newFilters },
-    });
-  };
+    })
+  }
   return (
     <label className={styles.label}>
       <input
@@ -38,10 +40,10 @@ const FiltersCheckbox = ({ value, text }) => {
       />
       <span className={styles.text}>{text}</span>
     </label>
-  );
-};
+  )
+}
 
-const Filters = () => {
+function Filters() {
   return (
     <div className={styles.filters}>
       <span className={styles.spanLabel}>КОЛИЧЕСТВО ПЕРЕСАДОК</span>
@@ -51,7 +53,7 @@ const Filters = () => {
       <FiltersCheckbox value="twoStops" text="2 Пересадки" />
       <FiltersCheckbox value="threeStops" text="3 Пересадки" />
     </div>
-  );
-};
+  )
+}
 
-export default Filters;
+export default Filters

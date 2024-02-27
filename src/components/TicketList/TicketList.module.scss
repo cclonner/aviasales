@@ -1,4 +1,3 @@
-
 .ticketListContainer {
   display: flex;
   flex-direction: column;
@@ -18,7 +17,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
 
   &__header {
@@ -26,7 +25,6 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-
   }
 
   &__logo {
@@ -38,17 +36,17 @@
   &__info {
     flex: 1;
   }
-  &__price{
-    color: #2196F3;
+  &__price {
+    color: #2196f3;
     font-size: 2.9em;
   }
-  &__segmentInfo{
-    &__label{
+  &__segmentInfo {
+    &__label {
       color: #a0b0b9;
       height: 22px;
       font-size: 14px;
     }
-    &__text{
+    &__text {
       font-size: 14px;
     }
   }
@@ -65,7 +63,7 @@
   }
 }
 
-.button{
+.button {
   background-color: #2196f3;
   color: #fff;
   cursor: pointer;
@@ -74,9 +72,9 @@
   text-align: center;
   width: 500px;
   border-radius: 5px;
-  border-color: #2196F3;
+  border-color: #2196f3;
   border: none;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.5px;
