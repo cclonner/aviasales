@@ -80,3 +80,21 @@
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
+.ticket__pricePlaceholder {
+  width: 100px; 
+  height: 20px;
+  background-color: #dfe5ec; 
+  margin-bottom: 10px;
+}
+
+.ticket__logoPlaceholder {
+  width: 100px;
+  height: 20px; 
+  background-color: #dfe5ec
+}
+
+.ticket__infoPlaceholder {
+  width: 100%; 
+  height: 50px; 
+  background-color: #dfe5ec 
+}

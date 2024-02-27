@@ -2,7 +2,7 @@
 /* eslint-disable default-param-last */
 const initialState = {
   tickets: [],
-  loading: false,
+  loading: true,
   error: null,
   filters: {
     stops: {

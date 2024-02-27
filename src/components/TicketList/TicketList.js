@@ -63,9 +63,22 @@ function Ticket({ ticket }) {
 
 function TicketList() {
   const tickets = useSelector((state) => state.tickets.tickets)
+  const loading = useSelector((state) => state.tickets.loading)
   const filters = useSelector((state) => state.tickets.filters.stops)
   const sorting = useSelector((state) => state.tickets.sorting)
   const [displayedTicketCount, setDisplayedTicketCount] = useState(5)
+
+  if (loading) {
+    return (
+      <div className={styles.ticket}>
+        <div className={styles.ticket__header}>
+          <div className={styles.ticket__pricePlaceholder} />
+          <div className={styles.ticket__logoPlaceholder} />
+        </div>
+        <div className={styles.ticket__infoPlaceholder} />
+      </div>
+    )
+  }
 
   const filteredTickets = tickets.filter((ticket) => {
     if (filters.all) return true
