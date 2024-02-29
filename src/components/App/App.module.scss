@@ -61,3 +61,23 @@
   justify-content: flex-start;
   padding-bottom: 20px;
 }
+.error{
+  background-color: #2196f3;
+  color: #fff;;
+  padding: 20px;
+  width: 462px;
+  height: 48px;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  gap: 10px;
+  &__infoPlaceholder{
+    height: 50px;
+  }
+  &__column{
+    height: 20px;
+    font-size: 35px;
+  }
+}

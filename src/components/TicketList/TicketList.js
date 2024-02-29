@@ -1,7 +1,20 @@
+/* eslint-disable react/no-array-index-key */
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import styles from './TicketList.module.scss'
+
+function Loader() {
+  return (
+    <div className={styles.ticket}>
+      <div className={styles.ticket__header}>
+        <div className={styles.ticket__pricePlaceholder} />
+        <div className={styles.ticket__logoPlaceholder} />
+      </div>
+      <div className={styles.ticket__infoPlaceholder} />
+    </div>
+  )
+}
 
 function SegmentInfo({ label, text }) {
   return (
@@ -53,8 +66,8 @@ function Ticket({ ticket }) {
         />
       </div>
       <div className={styles.ticket__info}>
-        {ticket.segments.map((segment) => (
-          <TicketSegment key={segment.id} segment={segment} />
+        {ticket.segments.map((segment, id) => (
+          <TicketSegment key={id} segment={segment} />
         ))}
       </div>
     </div>
@@ -68,19 +81,20 @@ function TicketList() {
   const sorting = useSelector((state) => state.tickets.sorting)
   const [displayedTicketCount, setDisplayedTicketCount] = useState(5)
 
-  if (loading) {
-    return (
-      <div className={styles.ticket}>
-        <div className={styles.ticket__header}>
-          <div className={styles.ticket__pricePlaceholder} />
-          <div className={styles.ticket__logoPlaceholder} />
-        </div>
-        <div className={styles.ticket__infoPlaceholder} />
-      </div>
-    )
-  }
-
-  const filteredTickets = tickets.filter((ticket) => {
+  const sortedTickets = [...tickets].sort((a, b) => {
+    if (sorting.byPrice) {
+      return a.price - b.price
+    }
+    if (sorting.byDuration) {
+      const getTotalDuration = (ticket) => ticket.segments.reduce((acc, seg) => acc + seg.duration, 0)
+      return getTotalDuration(a) - getTotalDuration(b)
+    }
+    if (sorting.byOptimal) {
+      return a.segments[0].duration + a.segments[1].duration - (b.segments[0].duration + b.segments[1].duration)
+    }
+    return <div className={styles.errorMessage}>Рейсов, подходящих под заданные фильтры, не найдено</div>
+  })
+  const filteredTickets = sortedTickets.filter((ticket) => {
     if (filters.all) return true
     if (filters.nonStop && ticket.segments.every((segment) => segment.stops.length === 0)) return true
     if (filters.oneStop && ticket.segments.every((segment) => segment.stops.length === 1)) return true
@@ -88,40 +102,27 @@ function TicketList() {
     if (filters.threeStops && ticket.segments.every((segment) => segment.stops.length === 3)) return true
     return false
   })
-  if (tickets.length === 0) {
-    return <div className={styles.errorMessage}>Рейсов, подходящих под заданные фильтры, не найдено</div>
+  if (filteredTickets.length === 0 && !loading) {
+    return (
+      <div
+        className={styles.ticket}
+        style={{ height: '100px', borderStyle: 'dotted', borderColor: 'orange', textAlign: 'center' }}
+      >
+        <div>Рейсов, подходящих под заданные фильтры, не найдено</div>
+      </div>
+    )
   }
-  const sortedTickets = filteredTickets.slice(0, displayedTicketCount).sort((a, b) => {
-    if (sorting.byPrice) {
-      return a.price - b.price
-    }
-    if (sorting.byDuration) {
-      return (
-        a.segments.reduce((acc, seg) => acc + seg.duration, 0) - b.segments.reduce((acc, seg) => acc + seg.duration, 0)
-      )
-    }
-    if (sorting.byOptimal) {
-      const weightPrice = 0.7
-      const weightDuration = 0.3
-
-      const weightA = a.price * weightPrice + a.segments.reduce((acc, seg) => acc + seg.duration, 0) * weightDuration
-      const weightB = b.price * weightPrice + b.segments.reduce((acc, seg) => acc + seg.duration, 0) * weightDuration
-
-      return weightA - weightB
-    }
-    return 0
-  })
-  const displayedTickets = filteredTickets.slice(0, displayedTicketCount)
 
   const handleClick = () => {
     setDisplayedTicketCount(displayedTicketCount + 5)
   }
   return (
     <div className={styles.ticketListContainer}>
-      {sortedTickets.map((ticket) => (
-        <Ticket key={ticket.id} ticket={ticket} />
+      {loading && <Loader />}
+      {filteredTickets.slice(0, displayedTicketCount).map((ticket, id) => (
+        <Ticket key={id} ticket={ticket} />
       ))}
-      {displayedTickets.length && (
+      {filteredTickets.slice(0, displayedTicketCount).length > 0 && (
         <button className={styles.button} onClick={handleClick}>
           Показать еще 5 билетов
         </button>

@@ -28,7 +28,7 @@ function Button({ type, text, isActive, onClick }) {
 }
 function SortButtons() {
   const dispatch = useDispatch()
-  const [activeButton, setActiveButton] = useState('byPrice')
+  const [activeButton, setActiveButton] = useState('byDuration')
 
   const handleButtonClick = (type) => {
     if (activeButton === type) {
@@ -50,13 +50,13 @@ function SortButtons() {
 
   return (
     <div className={styles.sortButtonsContainer}>
-      <Button type="byPrice" text="Самые дешевые" isActive={activeButton === 'byPrice'} onClick={handleButtonClick} />
       <Button
         type="byDuration"
         text="Самые быстрые"
         isActive={activeButton === 'byDuration'}
         onClick={handleButtonClick}
       />
+      <Button type="byPrice" text="Самые дешевые" isActive={activeButton === 'byPrice'} onClick={handleButtonClick} />
       <Button type="byOptimal" text="Оптимальные" isActive={activeButton === 'byOptimal'} onClick={handleButtonClick} />
     </div>
   )

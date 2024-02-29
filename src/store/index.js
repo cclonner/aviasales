@@ -7,6 +7,8 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       thunk: true,
+      immutableCheck: false,
+      serializableCheck: false,
     }),
 })
 

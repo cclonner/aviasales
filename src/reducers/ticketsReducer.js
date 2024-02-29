@@ -15,21 +15,21 @@ const initialState = {
   },
   sorting: {
     byPrice: false,
-    byDuration: false,
+    byDuration: true,
     byOptimal: false,
   },
 }
 
 const ticketsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'FETCH_TICKETS_START':
-      return { ...state, loading: true, error: null }
-
     case 'FETCH_TICKETS_SUCCESS':
-      return { ...state, loading: false, tickets: action.payload }
+      return { ...state, tickets: [...state.tickets, ...action.payload] }
 
     case 'FETCH_TICKETS_FAILURE':
-      return { ...state, loading: false, error: action.payload }
+      return { ...state, error: action.payload }
+
+    case 'SET_LOADING':
+      return { ...state, loading: action.payload }
 
     case 'TOGGLE_FILTER':
       return {

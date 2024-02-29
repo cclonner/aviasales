@@ -1,4 +1,6 @@
-import { useEffect } from 'react'
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-await-in-loop */
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { getSearchId, getTickets } from '../../services/api'
@@ -11,23 +13,37 @@ import styles from './App.module.scss'
 
 function App() {
   const dispatch = useDispatch()
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const searchId = await getSearchId()
-        const { tickets, stop } = await getTickets(searchId)
+  const [errorCount, setErrorCount] = useState(0)
+  const [isErrorLimitReached, setIsErrorLimitReached] = useState(false)
 
-        if (!stop) {
-          dispatch({ type: 'FETCH_TICKETS_SUCCESS', payload: tickets })
+  const fetchData = async () => {
+    const searchId = await getSearchId()
+
+    let isStopped = false
+    while (!isStopped) {
+      try {
+        const data = await getTickets(searchId)
+        if ('tickets' in data && Array.isArray(data.tickets) && data.stop === false) {
+          dispatch({ type: 'FETCH_TICKETS_SUCCESS', payload: data.tickets })
+          setErrorCount(0)
+        } else if (data.stop === true) {
+          isStopped = true
+          dispatch({ type: 'SET_LOADING', payload: false })
         }
       } catch (error) {
-        dispatch({ type: 'FETCH_TICKETS_FAILURE', payload: error.message })
+        setErrorCount((prevCount) => prevCount + 1)
+
+        if (errorCount >= 4) {
+          setIsErrorLimitReached(true)
+          isStopped = true
+        }
       }
     }
+  }
 
+  useEffect(() => {
     fetchData()
   }, [dispatch])
-
   return (
     <div id="Avisales" className={styles.body_app}>
       <div className={styles.logo}>
@@ -36,6 +52,15 @@ function App() {
       <div className={styles.app}>
         <Filters />
         <div className={styles.menu}>
+          <div className={styles.error}>
+            <div className={styles.error__header} />
+            <div className={styles.error__column}>{'{ERROR}'}</div>
+            <div className={styles.error__infoPlaceholder}>
+              Произошла ошибка при загрузке билетов.
+              <br />
+              Попробуйте изменить параметры поиска или повторить позже.
+            </div>
+          </div>
           <SortButtons />
           <TicketList />
         </div>
