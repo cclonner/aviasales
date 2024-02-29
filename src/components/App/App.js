@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-await-in-loop */
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -52,15 +51,17 @@ function App() {
       <div className={styles.app}>
         <Filters />
         <div className={styles.menu}>
-          <div className={styles.error}>
-            <div className={styles.error__header} />
-            <div className={styles.error__column}>{'{ERROR}'}</div>
-            <div className={styles.error__infoPlaceholder}>
-              Произошла ошибка при загрузке билетов.
-              <br />
-              Попробуйте изменить параметры поиска или повторить позже.
+          {isErrorLimitReached && (
+            <div className={styles.error}>
+              <div className={styles.error__header} />
+              <div className={styles.error__column}>{'{ERROR}'}</div>
+              <div className={styles.error__infoPlaceholder}>
+                Произошла ошибка при загрузке билетов.
+                <br />
+                Попробуйте изменить параметры поиска или повторить позже.
+              </div>
             </div>
-          </div>
+          )}
           <SortButtons />
           <TicketList />
         </div>

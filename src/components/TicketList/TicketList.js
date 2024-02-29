@@ -90,9 +90,18 @@ function TicketList() {
       return getTotalDuration(a) - getTotalDuration(b)
     }
     if (sorting.byOptimal) {
-      return a.segments[0].duration + a.segments[1].duration - (b.segments[0].duration + b.segments[1].duration)
+      const getTotalDuration = (ticket) => ticket.segments.reduce((acc, seg) => acc + seg.duration, 0)
+      const getOptimalScore = (ticket) => ticket.price + getTotalDuration(ticket) * 0.5
+      return getOptimalScore(a) - getOptimalScore(b)
     }
-    return <div className={styles.errorMessage}>Рейсов, подходящих под заданные фильтры, не найдено</div>
+    return (
+      <div
+        className={styles.ticket}
+        style={{ height: '100px', borderStyle: 'dotted', borderColor: 'orange', textAlign: 'center' }}
+      >
+        <div>Рейсов, подходящих под заданные фильтры, не найдено</div>
+      </div>
+    )
   })
   const filteredTickets = sortedTickets.filter((ticket) => {
     if (filters.all) return true
