@@ -13,7 +13,6 @@ import styles from './App.module.scss'
 
 function App() {
   const dispatch = useDispatch()
-  const [errorCount, setErrorCount] = useState(0)
   const [isErrorLimitReached, setIsErrorLimitReached] = useState(false)
 
   const fetchData = async () => {
