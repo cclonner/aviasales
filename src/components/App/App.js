@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-await-in-loop */
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -16,30 +17,33 @@ function App() {
   const [isErrorLimitReached, setIsErrorLimitReached] = useState(false)
 
   const fetchData = async () => {
-    const searchId = await getSearchId()
+    if (navigator.onLine) {
+      const searchId = await getSearchId()
 
-    let isStopped = false
-    while (!isStopped) {
-      try {
-        const data = await getTickets(searchId)
-        if ('tickets' in data && Array.isArray(data.tickets) && data.stop === false) {
-          dispatch({ type: 'FETCH_TICKETS_SUCCESS', payload: data.tickets })
-          setErrorCount(0)
-        } else if (data.stop === true) {
-          isStopped = true
-          dispatch({ type: 'SET_LOADING', payload: false })
+      let isStopped = false
+      while (!isStopped) {
+        try {
+          const data = await getTickets(searchId, dispatch)
+
+          if ('tickets' in data && Array.isArray(data.tickets) && data.stop === false) {
+            dispatch({ type: 'FETCH_TICKETS_SUCCESS', payload: data.tickets })
+          } else if (data.stop === true) {
+            isStopped = true
+            dispatch({ type: 'SET_LOADING', payload: false })
+          }
+        } catch (error) {
+          console.log(error, errorCount)
+          setErrorCount((prevCount) => prevCount + 1)
         }
-      } catch (error) {
-        setErrorCount((prevCount) => prevCount + 1)
-
-        if (errorCount >= 4) {
+        if (errorCount >= 3) {
           setIsErrorLimitReached(true)
           isStopped = true
         }
       }
+    } else {
+      setIsErrorLimitReached(true)
     }
   }
-
   useEffect(() => {
     fetchData()
   }, [dispatch])

@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-shadow */
 import { useDispatch, useSelector } from 'react-redux'
 
 import styles from './Filters.module.scss'
@@ -10,18 +12,18 @@ function FiltersCheckbox({ value, text }) {
     let newFilters
 
     if (filter === 'all') {
-      newFilters = Object.keys(stopsFilters).reduce((acc, key) => {
-        acc[key] = !stopsFilters[filter]
-        return acc
-      }, {})
-    } else if (stopsFilters.all) {
+      newFilters = Object.fromEntries(Object.entries(stopsFilters).map(([key, value]) => [key, !stopsFilters[filter]]))
+    } else {
       newFilters = {
         ...stopsFilters,
-        all: false,
         [filter]: !stopsFilters[filter],
       }
-    } else {
-      newFilters = { ...stopsFilters, [filter]: !stopsFilters[filter] }
+
+      if (filter !== 'all') {
+        newFilters.all = Object.values(newFilters)
+          .slice(1)
+          .every((v) => v)
+      }
     }
 
     dispatch({
@@ -29,6 +31,7 @@ function FiltersCheckbox({ value, text }) {
       payload: { category: 'stops', filters: newFilters },
     })
   }
+
   return (
     <label className={styles.label}>
       <input
