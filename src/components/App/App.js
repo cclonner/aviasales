@@ -20,7 +20,9 @@ function App() {
     if (navigator.onLine) {
       const searchId = await getSearchId()
 
+      const errors = []
       let isStopped = false
+
       while (!isStopped) {
         try {
           const data = await getTickets(searchId, dispatch)
@@ -32,12 +34,12 @@ function App() {
             dispatch({ type: 'SET_LOADING', payload: false })
           }
         } catch (error) {
-          console.log(error, errorCount)
-          setErrorCount((prevCount) => prevCount + 1)
-        }
-        if (errorCount >= 3) {
-          setIsErrorLimitReached(true)
-          isStopped = true
+          errors.push(error)
+
+          if (errors.length >= 4) {
+            setIsErrorLimitReached(true)
+            isStopped = true
+          }
         }
       }
     } else {
